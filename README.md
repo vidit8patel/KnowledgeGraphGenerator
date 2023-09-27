@@ -1,6 +1,6 @@
 # Knowledge Graph Generator
 
-A Streamlit app that generates a knowledge graph from the provided article, newspaper, or research paper link. This app allows users to visualize relationships and nodes in a given piece of text. The app uses OpenAI's GPT-3.5-turbo to parse the text and NetworkX to visualize the generated graph.
+An app that generates a knowledge graph from the provided article, newspaper, or research paper link. This app allows users to visualize relationships and nodes in a given piece of text. The app uses OpenAI's GPT-3.5-turbo to parse the text and NetworkX to visualize the generated graph.
 
 [video.webm](https://github.com/vidit8patel/KnowledgeGraphGenerator/assets/105821053/c2a22291-6d22-454b-bd6b-e5ee9909e429)
 
@@ -26,20 +26,22 @@ Clone the repository and navigate to the directory:
 ```sh
 git clone https://github.com/vidit8patel/KnowledgeGraphGenerator.git
 cd knowledgegraphgenerator
+```
+
 
 ## Install the Dependencies
 Run the following command to install the required dependencies:
 
 ```sh
 pip install -r requirements.txt
-
+```
 
 ## Usage
 Run the Streamlit app using the following command:
 
 ```sh
 streamlit run app.py
-
+```
 
 Open your web browser and go to http://localhost:8501 to access the app.
 
