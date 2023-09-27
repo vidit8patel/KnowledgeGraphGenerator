@@ -45,10 +45,11 @@ streamlit run app.py
 
 Open your web browser and go to http://localhost:8501 to access the app.
 
-Paste the link to an article, newspaper, or research paper in the provided input field.
-Specify the maximum number of edges per node and the maximum number of nodes for the graph.
-Click on the 'Generate Knowledge Graph' button to visualize the knowledge graph.
-Features
-URL Input: Allows the user to input the URL of the desired article.
-Max Edges and Nodes Input: Provides options to set maximum limits for edges per node and nodes in the graph.
-Knowledge Graph Visualization: Visualizes the extracted information from the article as a knowledge graph using nodes and edges to represent entities and their relationships.
+1) Paste the link to an article, newspaper, or research paper in the provided input field.
+2) Specify the maximum number of edges per node and the maximum number of nodes for the graph.
+3) Click on the 'Generate Knowledge Graph' button to visualize the knowledge graph.
+
+### Features
+#### URL Input: Allows the user to input the URL of the desired article.
+#### Max Edges and Nodes Input: Provides options to set maximum limits for edges per node and nodes in the graph.
+#### Knowledge Graph Visualization: Visualizes the extracted information from the article as a knowledge graph using nodes and edges to represent entities and their relationships.
