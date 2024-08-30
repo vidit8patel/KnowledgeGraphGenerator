@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify, send_file
 from flask_cors import CORS
 
-from knowledgegraph import get_article_text, generate_graph,draw_graph, parse_article
+from knowledgegraph import get_article_text, generate_graph, parse_article
 import io
 import networkx as nx
 import matplotlib.pyplot as plt
@@ -12,44 +12,94 @@ app = Flask(__name__)
 CORS(app)
 
 
-@app.route('/')
+@app.route("/")
 def hello():
     return "Hello, Flask is running!"
 
-@app.route('/generate-knowledge-graph', methods=['POST'])
-def generate_knowledge_graph():
-    data = request.json
-    url = data.get('url')
-    num_edges = data.get('num_edges', 2)
-    num_nodes = data.get('num_nodes', 10)
 
-    article = get_article_text(url)
-    if not article:
-        return jsonify({"error": "Unable to retrieve article text"}), 400
+@app.route("/generate_graph", methods=["POST"])
+def generate_graph_endpoint():
+    """
+    Endpoint to generate a knowledge graph based on the provided URL and user constraints.
+    """
+    try:
+        # Extract the request data
+        data = request.json
+        url = data.get("url")
+        num_nodes = int(data.get("num_nodes", 10))
+        num_edges = int(data.get("num_edges", 2))
 
-    parsed_data = parse_article(article, num_edges, num_nodes)
-    graph_json = generate_graph(parsed_data, num_edges, num_nodes)
+        # Get and parse the article text
+        article = get_article_text(url)
+        if not article:
+            return jsonify({"error": "Unable to retrieve article text."}), 400
 
-    # Generate the graph image and send it back as a response
-    image_stream = draw_graph(graph_json)  # Ensure this is a BytesIO stream
-    return send_file(image_stream, mimetype='image/png', as_attachment=True, download_name='knowledge_graph.png')
+        parsed_data = parse_article(article, num_edges, num_nodes)
+        if not parsed_data:
+            return jsonify({"error": "Failed to parse article."}), 500
+
+        graph_json = generate_graph(parsed_data, num_edges, num_nodes)
+
+        # Draw the graph and return as image
+        image_buffer = draw_graph(graph_json)
+
+        # Return the image as a response
+        return send_file(
+            image_buffer,
+            mimetype="image/png",
+            as_attachment=True,
+            download_name="knowledgegraph.png",
+        )
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 
+def draw_graph(graph_json):
+    """
+    Draws the knowledge graph and returns it as an image buffer.
+    """
+    G = nx.DiGraph()
+    for node in graph_json["nodes"]:
+        G.add_node(node["id"], label=node["label"])
 
-# Route to return graph as an image
-@app.route('/graph-image', methods=['POST'])
-def graph_image():
-    data = request.json
-    graph_json = data.get('graph_json')
+    for edge in graph_json["edges"]:
+        G.add_edge(edge["src"], edge["dst"], label=edge["label"])
 
-    if not graph_json:
-        return jsonify({"error": "Graph data is required"}), 400
+    # Remove isolated nodes
+    isolated_nodes = [node for node, degree in dict(G.degree()).items() if degree == 0]
+    G.remove_nodes_from(isolated_nodes)
 
-    image = draw_graph(graph_json)
-    return send_file(image, mimetype='image/png')
+    pos = nx.spring_layout(G, k=0.8)  # Layout for our graph
+
+    # Drawing nodes and edges
+    plt.figure(figsize=(15, 10))
+    nx.draw_networkx_nodes(G, pos, node_size=6000, node_color="#add8e6")
+    nx.draw_networkx_edges(
+        G, pos, edge_color="black", connectionstyle="arc3,rad=0", node_size=6000
+    )
+    labels = {node: G.nodes[node]["label"] for node in G.nodes()}
+    nx.draw_networkx_labels(
+        G, pos, labels=labels, font_size=10, font_color="black", font_weight="bold"
+    )
+
+    edge_labels = nx.get_edge_attributes(G, "label")
+    nx.draw_networkx_edge_labels(
+        G,
+        pos,
+        edge_labels=edge_labels,
+        font_size=10,
+        font_color="black",
+        font_family="sans-serif",
+    )
+
+    plt.axis("off")
+    buf = io.BytesIO()
+    plt.savefig(buf, format="png")
+    plt.close()
+    buf.seek(0)
+    return buf
 
 
-# Other functions for article scraping, parsing, and graph generation would go here
-
-if __name__ == '__main__':
-    app.run(debug=True)
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)

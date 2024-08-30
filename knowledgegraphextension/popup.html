@@ -1,13 +1,19 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Knowledge Graph Generator</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h3>Generate Knowledge Graph</h3>
-    <input type="number" id="num_edges" placeholder="Max Edges per Node" value="2">
-    <input type="number" id="num_nodes" placeholder="Max Nodes" value="10">
-    <button id="generate">Generate Knowledge Graph</button>
+    <h1>Knowledge Graph Generator</h1>
+    <label for="num-nodes">Max Nodes:</label>
+    <input type="number" id="num-nodes" value="10" min="1">
+    <label for="num-edges">Max Edges per Node:</label>
+    <input type="number" id="num-edges" value="2" min="1">
+    <button id="generate-graph">Generate Graph</button>
     <p id="status"></p>
 </body>
+<script src="popup.js"></script>
 </html>

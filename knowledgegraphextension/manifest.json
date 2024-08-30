@@ -1,20 +1,26 @@
 {
-    "manifest_version": 3,
-    "name": "Knowledge Graph Generator",
-    "version": "1.0",
-    "description": "Generate Knowledge Graphs directly from any webpage.",
-    "permissions": ["activeTab", "scripting"],
-    "background": {
-      "service_worker": "background.js"
-    },
-    "action": {
-      "default_popup": "popup.html"
-    },
-    "content_scripts": [
-      {
-        "matches": ["<all_urls>"],
-        "js": ["content.js"]
-      }
-    ]
-  }
-  
+  "manifest_version": 3,
+  "name": "Knowledge Graph Generator",
+  "version": "1.0",
+  "description": "Generate and download a knowledge graph from any webpage.",
+  "permissions": [
+    "activeTab",
+    "storage"
+  ],
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "content.js"
+      ]
+    }
+  ]
+}

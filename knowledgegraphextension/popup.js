@@ -1,35 +1,20 @@
-document.getElementById('generate').addEventListener('click', async () => {
-    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-    chrome.scripting.executeScript({
-        target: { tabId: tab.id },
-        function: generateKnowledgeGraph,
+document.getElementById('generate-graph').addEventListener('click', async () => {
+    const numNodes = document.getElementById('num-nodes').value;
+    const numEdges = document.getElementById('num-edges').value;
+
+    document.getElementById('status').textContent = "Generating knowledge graph...";
+
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+        chrome.tabs.sendMessage(tabs[0].id, { action: 'generate_graph', numNodes, numEdges }, (response) => {
+            if (response.status === 'success') {
+                document.getElementById('status').textContent = "Knowledge graph generated!";
+                const link = document.createElement('a');
+                link.href = response.imageUrl;
+                link.download = 'knowledgegraph.png';
+                link.click();
+            } else {
+                document.getElementById('status').textContent = "Failed to generate graph.";
+            }
+        });
     });
 });
-
-async function generateKnowledgeGraph() {
-    const url = window.location.href;
-    const response = await fetch('http://127.0.0.1:5000/generate-knowledge-graph', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ url, num_edges: 2, num_nodes: 10 }),
-    });
-
-    if (response.ok) {
-        const imageBlob = await response.blob();
-        const imageUrl = URL.createObjectURL(imageBlob);
-
-        // Create an anchor element and simulate a click to download the image
-        const a = document.createElement('a');
-        a.href = imageUrl;
-        a.download = 'knowledge_graph.png'; // Set the filename
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-
-        // Optionally, revoke the Object URL after the download
-        URL.revokeObjectURL(imageUrl);
-    } else {
-        alert('Failed to generate knowledge graph. Check the console for details.');
-        console.error('Error:', await response.text());
-    }
-}
