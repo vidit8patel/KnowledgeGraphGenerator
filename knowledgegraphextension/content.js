@@ -1,3 +1,4 @@
+// Listener to handle messages from the extension popup or background script
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.action === 'generate_graph') {
         const numNodes = request.numNodes;
@@ -33,6 +34,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
                 console.log('Blob URL:', url);
                 sendResponse({ status: 'success', imageUrl: url });
 
+                // Automatically download the generated knowledge graph
                 const link = document.createElement('a');
                 link.href = url;
                 link.download = 'knowledgegraph.png';
@@ -48,4 +50,3 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         return true;  // Will respond asynchronously
     }
 });
-    

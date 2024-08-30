@@ -9,20 +9,19 @@ import google.generativeai as genai
 from dotenv import load_dotenv
 import os
 
+# Load environment variables from a .env file
 load_dotenv()
 API_KEY = os.getenv("API_KEY")
 
+# Configure the generative AI model with the API key
 genai.configure(api_key=API_KEY)
-
-# commit
 
 
 def main():
     """
     Main function to execute the Streamlit app.
-    The function initializes the app title, inputs and executes necessary functions on button press.
+    Initializes the app title, inputs, and executes necessary functions on button press.
     """
-
     st.title("Knowledge Graph Generator")
 
     # Streamlit widgets to take user inputs
@@ -57,10 +56,10 @@ def get_article_text(url: str) -> str:
     Fetches and returns the article text from a given URL using web scraping.
 
     Parameters:
-    url (str): The URL of the article.
+        url (str): The URL of the article.
 
     Returns:
-    str: The extracted article text.
+        str: The extracted article text, or an empty string if an error occurs.
     """
     try:
         response = requests.get(url)
@@ -73,6 +72,17 @@ def get_article_text(url: str) -> str:
 
 
 def parse_article(article: str, num_edges: int, num_nodes: int) -> dict:
+    """
+    Parses the article text and extracts key entities and their relationships to form a knowledge graph.
+
+    Parameters:
+        article (str): The article text.
+        num_edges (int): The maximum number of edges per node.
+        num_nodes (int): The maximum number of nodes in the graph.
+
+    Returns:
+        dict: The parsed nodes and edges information in a dictionary format.
+    """
     try:
         model = genai.GenerativeModel(
             model_name="gemini-1.5-flash",
@@ -140,18 +150,18 @@ def parse_article(article: str, num_edges: int, num_nodes: int) -> dict:
         return {"nodes": [], "edges": []}
 
 
-def generate_graph(parsed_data, num_edges, num_nodes):
+def generate_graph(parsed_data: dict, num_edges: int, num_nodes: int) -> dict:
     """
     Generates a graph from the parsed data using NetworkX.
     The graph is generated based on the constraints for nodes and edges provided by the user.
 
     Parameters:
-    parsed_data (dict): The parsed nodes and edges information in dictionary format.
-    num_edges (int): The maximum number of edges per node.
-    num_nodes (int): The maximum number of nodes in the graph.
+        parsed_data (dict): The parsed nodes and edges information in dictionary format.
+        num_edges (int): The maximum number of edges per node.
+        num_nodes (int): The maximum number of nodes in the graph.
 
     Returns:
-    dict: The generated nodes and edges information in dictionary format.
+        dict: The generated nodes and edges information in dictionary format.
     """
     G = nx.DiGraph()
     nodes = parsed_data.get("nodes", [])[:num_nodes]
@@ -176,12 +186,12 @@ def generate_graph(parsed_data, num_edges, num_nodes):
     }
 
 
-def draw_graph(graph_json):
+def draw_graph(graph_json: dict):
     """
     Draws and displays the generated graph using NetworkX and Matplotlib.
 
     Parameters:
-    graph_json (dict): The generated nodes and edges information in dictionary format.
+        graph_json (dict): The generated nodes and edges information in dictionary format.
     """
     G = nx.DiGraph()
     for node in graph_json["nodes"]:
@@ -226,4 +236,4 @@ def draw_graph(graph_json):
 
 
 if __name__ == "__main__":
-    main()  # Execute main function
+    main()  # Execute the main function

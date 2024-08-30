@@ -1,19 +1,19 @@
 from flask import Flask, request, jsonify, send_file
 from flask_cors import CORS
-
 from knowledgegraph import get_article_text, generate_graph, parse_article
 import io
 import networkx as nx
 import matplotlib.pyplot as plt
-from bs4 import BeautifulSoup
-import requests
 
 app = Flask(__name__)
-CORS(app)
+CORS(app)  # Enable Cross-Origin Resource Sharing
 
 
 @app.route("/")
 def hello():
+    """
+    Basic route to check if Flask is running.
+    """
     return "Hello, Flask is running!"
 
 
@@ -55,9 +55,15 @@ def generate_graph_endpoint():
         return jsonify({"error": str(e)}), 500
 
 
-def draw_graph(graph_json):
+def draw_graph(graph_json: dict) -> io.BytesIO:
     """
     Draws the knowledge graph and returns it as an image buffer.
+
+    Parameters:
+        graph_json (dict): The generated nodes and edges information in dictionary format.
+
+    Returns:
+        io.BytesIO: A buffer containing the image data.
     """
     G = nx.DiGraph()
     for node in graph_json["nodes"]:
