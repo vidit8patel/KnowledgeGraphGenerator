@@ -1,6 +1,6 @@
 # Knowledge Graph Generator
 
-An app that generates a knowledge graph from the provided article, newspaper, or research paper link. This app allows users to visualize relationships and nodes in a given piece of text. The app uses OpenAI's GPT-3.5-turbo to parse the text and NetworkX to visualize the generated graph.
+An app that generates a knowledge graph from the provided article, newspaper, or research paper link. This app allows users to visualize relationships and nodes in a given piece of text. It uses Google's GenerativeAI Gemini to parse the text and NetworkX to visualize the generated graph. It consists of a web application built with Streamlit and a browser extension that allows users to generate and download knowledge graphs directly from their browser.
 
 [video.webm](https://github.com/vidit8patel/KnowledgeGraphGenerator/assets/105821053/c2a22291-6d22-454b-bd6b-e5ee9909e429)
 
@@ -9,47 +9,155 @@ An app that generates a knowledge graph from the provided article, newspaper, or
 ![Output2](https://github.com/vidit8patel/KnowledgeGraphGenerator/assets/105821053/07615117-0eda-4bda-935d-13f682310122)
 
 
-## Prerequisites
+## Table of Contents
 
-- Python
-- OpenAI API Key
-- Streamlit
-- NetworkX
-- Matplotlib
-- BeautifulSoup
-- Requests
+- [Overview](#overview)
+- [Features](#features)
+- [Technologies Used](#technologies-used)
+- [Installation](#installation)
+  - [Web Application](#web-application)
+  - [Browser Extension](#browser-extension)
+- [Usage](#usage)
+  - [Web Application](#web-application-usage)
+  - [Browser Extension](#browser-extension-usage)
+- [RESTful API](#restful-api)
+- [Debugging and Troubleshooting](#debugging-and-troubleshooting)
+- [Contributing](#contributing)
+- [License](#license)
+- [Acknowledgements](#acknowledgements)
+
+## Overview
+
+The Knowledge Graph Generator project aims to simplify the process of extracting and visualizing relationships within textual data. The web application scrapes text from provided URLs, processes it using a generative AI model, and outputs a knowledge graph. The browser extension allows users to generate these graphs directly from their current browser page and download them as images.
+
+## Features
+
+- **Web Scraping**: Extracts text content from any given URL.
+- **AI-Powered Parsing**: Uses Google's Generative AI to identify entities and relationships within the text.
+- **Graph Visualization**: Visualizes relationships in a knowledge graph using NetworkX and Matplotlib.
+- **Browser Extension**: Generate and download knowledge graphs directly from any webpage.
+- **RESTful API**: A Flask-based API to support the backend logic, enabling the generation of knowledge graphs as images.
+
+## Technologies Used
+
+- **Python**: Core programming language.
+- **Streamlit**: For building the web application interface.
+- **NetworkX & Matplotlib**: For creating and visualizing knowledge graphs.
+- **BeautifulSoup & Requests**: For web scraping.
+- **Flask**: To create the RESTful API.
+- **Google Generative AI**: For natural language processing.
+- **JavaScript**: For browser extension logic.
+- **HTML/CSS**: For browser extension UI.
 
 ## Installation
 
-Clone the repository and navigate to the directory:
+### Web Application
 
-```sh
-git clone https://github.com/vidit8patel/KnowledgeGraphGenerator.git
-cd knowledgegraphgenerator
-```
+1. **Clone the repository:**
+   \`\`\`bash
+   git clone https://github.com/yourusername/knowledge-graph-generator.git
+   cd knowledge-graph-generator
+   \`\`\`
 
+2. **Install dependencies:**
+   \`\`\`bash
+   pip install -r requirements.txt
+   \`\`\`
 
-## Install the Dependencies
-Run the following command to install the required dependencies:
+3. **Set up environment variables:**
+   - Create a `.env` file in the project directory and add your Google Generative AI API key:
+     \`\`\`
+     API_KEY=your_api_key_here
+     \`\`\`
 
-```sh
-pip install -r requirements.txt
-```
+4. **Run the Flask server:**
+   \`\`\`bash
+   python app.py
+   \`\`\`
+
+5. **Run the Streamlit app:**
+   \`\`\`bash
+   streamlit run app.py
+   \`\`\`
+
+### Browser Extension
+
+1. **Navigate to the extension directory:**
+   \`\`\`bash
+   cd browser-extension
+   \`\`\`
+
+2. **Load the extension in Chrome:**
+   - Open Chrome and go to `chrome://extensions/`.
+   - Enable "Developer mode" in the top right corner.
+   - Click "Load unpacked" and select the `browser-extension` folder.
 
 ## Usage
-Run the Streamlit app using the following command:
 
-```sh
-streamlit run app.py
-```
+### Web Application Usage
 
-Open your web browser and go to http://localhost:8501 to access the app.
+1. **Access the Streamlit app:**
+   - Open the app in your browser using the URL provided by Streamlit (usually `http://localhost:8501`).
+  
+2. **Input URL and Settings:**
+   - Enter the URL of the article or webpage you want to analyze.
+   - Set the maximum number of nodes and edges.
+   - Click "Generate Knowledge Graph" to see the visualization.
 
-1) Paste the link to an article, newspaper, or research paper in the provided input field.
-2) Specify the maximum number of edges per node and the maximum number of nodes for the graph.
-3) Click on the 'Generate Knowledge Graph' button to visualize the knowledge graph.
+### Browser Extension Usage
 
-### Features
-#### URL Input: Allows the user to input the URL of the desired article.
-#### Max Edges and Nodes Input: Provides options to set maximum limits for edges per node and nodes in the graph.
-#### Knowledge Graph Visualization: Visualizes the extracted information from the article as a knowledge graph using nodes and edges to represent entities and their relationships.
+1. **Navigate to a webpage:**
+   - Visit any article or webpage you want to analyze.
+
+2. **Use the extension:**
+   - Click on the Knowledge Graph Generator icon in the browser toolbar.
+   - Choose the desired settings for nodes and edges.
+   - Click "Generate Graph" to download the graph as an image.
+
+## RESTful API
+
+The Flask API allows you to generate and download knowledge graphs as images. 
+
+### Endpoint: `/generate_graph`
+
+- **Method:** `POST`
+- **Content-Type:** `application/json`
+- **Payload:**
+  \`\`\`json
+  {
+      "url": "https://example.com/article",
+      "num_nodes": 10,
+      "num_edges": 2
+  }
+  \`\`\`
+
+- **Response:** A PNG image of the generated knowledge graph.
+
+### Example cURL Command
+
+\`\`\`bash
+curl -X POST -H "Content-Type: application/json" -d '{"url": "https://example.com/article", "num_nodes": 10, "num_edges": 2}' http://localhost:5000/generate_graph --output knowledgegraph.png
+\`\`\`
+
+## Debugging and Troubleshooting
+
+- **Stuck on "Generating Knowledge Graph..."**: Ensure the Flask server is running and accessible. Use Developer Tools to inspect the network requests and console logs.
+- **CORS Issues**: Make sure the Flask app allows cross-origin requests by enabling CORS.
+
+## Contributing
+
+Contributions are welcome! Please fork this repository and submit a pull request for any improvements or new features.
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+## Acknowledgements
+
+- [Streamlit](https://streamlit.io/)
+- [Google Generative AI](https://cloud.google.com/generative-ai)
+- [NetworkX](https://networkx.github.io/)
+- [BeautifulSoup](https://www.crummy.com/software/BeautifulSoup/)
+- [Flask](https://flask.palletsprojects.com/)
+
+---
