@@ -2,7 +2,6 @@
 
 An app that generates a knowledge graph from the provided article, newspaper, or research paper link. This app allows users to visualize relationships and nodes in a given piece of text. It uses Google's GenerativeAI Gemini to parse the text and NetworkX to visualize the generated graph. It consists of a web application built with Streamlit and a browser extension that allows users to generate and download knowledge graphs directly from their browser.
 
-[video.webm](https://github.com/vidit8patel/KnowledgeGraphGenerator/assets/105821053/c2a22291-6d22-454b-bd6b-e5ee9909e429)
 
 ![Output1](https://github.com/vidit8patel/KnowledgeGraphGenerator/assets/105821053/68b79242-18c3-46fc-9b11-232b0f2edc89)
 
@@ -58,38 +57,38 @@ The Knowledge Graph Generator project aims to simplify the process of extracting
 ### Web Application
 
 1. **Clone the repository:**
-   \`\`\`bash
+   ```bash
    git clone https://github.com/yourusername/knowledge-graph-generator.git
    cd knowledge-graph-generator
-   \`\`\`
+   ```
 
 2. **Install dependencies:**
-   \`\`\`bash
+   ```bash
    pip install -r requirements.txt
-   \`\`\`
+   ```
 
 3. **Set up environment variables:**
    - Create a `.env` file in the project directory and add your Google Generative AI API key:
-     \`\`\`
+     ```
      API_KEY=your_api_key_here
-     \`\`\`
+     ```
 
 4. **Run the Flask server:**
-   \`\`\`bash
+   ```bash
    python app.py
-   \`\`\`
+   ```
 
 5. **Run the Streamlit app:**
-   \`\`\`bash
+   ```bash
    streamlit run app.py
-   \`\`\`
+   ```
 
 ### Browser Extension
 
 1. **Navigate to the extension directory:**
-   \`\`\`bash
+   ```bash
    cd browser-extension
-   \`\`\`
+   ```
 
 2. **Load the extension in Chrome:**
    - Open Chrome and go to `chrome://extensions/`.
@@ -127,21 +126,21 @@ The Flask API allows you to generate and download knowledge graphs as images.
 - **Method:** `POST`
 - **Content-Type:** `application/json`
 - **Payload:**
-  \`\`\`json
+  ```json
   {
       "url": "https://example.com/article",
       "num_nodes": 10,
       "num_edges": 2
   }
-  \`\`\`
+  ```
 
 - **Response:** A PNG image of the generated knowledge graph.
 
 ### Example cURL Command
 
-\`\`\`bash
+```bash
 curl -X POST -H "Content-Type: application/json" -d '{"url": "https://example.com/article", "num_nodes": 10, "num_edges": 2}' http://localhost:5000/generate_graph --output knowledgegraph.png
-\`\`\`
+```
 
 ## Debugging and Troubleshooting
 
