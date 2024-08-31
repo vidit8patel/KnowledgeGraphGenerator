@@ -9,6 +9,10 @@ An app that generates a knowledge graph from the provided article, newspaper, or
 ![Output2](https://github.com/vidit8patel/KnowledgeGraphGenerator/assets/105821053/07615117-0eda-4bda-935d-13f682310122)
 
 
+https://github.com/user-attachments/assets/719ed10b-9828-454c-a739-7c64502658fa
+
+
+
 ## Table of Contents
 
 - [Overview](#overview)
